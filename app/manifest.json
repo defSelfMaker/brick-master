@@ -1,0 +1,9 @@
+{
+    "name": "Brick Master",
+    "description": "Building blocks of Lego bricks",
+    "theme_color": "#FCE4EC",
+    "background_color": "#FCFCFC",
+    "scope": "/",
+    "start_url": "/",
+    "display": "standalone"
+}
