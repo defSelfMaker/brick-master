@@ -324,14 +324,6 @@ document
         ).fill(null);
         runStep2();
     });
-document
-    .getElementById("clear-depth-overrides-button")
-    .addEventListener("click", () => {
-        overrideDepthPixelArray = new Array(
-            targetResolution[0] * targetResolution[1] * 4,
-        ).fill(null);
-        runStep2();
-    });
 
 let DEFAULT_STUD_MAP = "all_tile_colors";
 let DEFAULT_COLOR = "#853433";
@@ -1075,40 +1067,6 @@ function runStep3() {
 }
 
 let isStep3ViewExpanded = false;
-
-[
-    document.getElementById("toggle-expansion-button"),
-    document.getElementById("toggle-depth-expansion-button"),
-].forEach((button) =>
-    button.addEventListener("click", () => {
-        isStep3ViewExpanded = !isStep3ViewExpanded;
-        const toToggleElements = Array.from(
-            document.getElementsByClassName("hide-on-step-3-expansion"),
-        );
-        if (isStep3ViewExpanded) {
-            toToggleElements.forEach((element) => (element.hidden = true));
-            document.getElementById("toggle-expansion-button").title =
-                "Collapse picture";
-            document.getElementById("toggle-depth-expansion-button").innerHTML =
-                "Collapse Picture";
-            document.getElementById("step-3").className = "col-12";
-        } else {
-            toToggleElements.forEach((element) => (element.hidden = false));
-            document.getElementById("toggle-expansion-button").title =
-                "Expand picture";
-            document.getElementById("toggle-depth-expansion-button").innerHTML =
-                "Expand Picture";
-            document.getElementById("step-3").className = "col-6 col-md-3";
-            runStep1();
-        }
-        document.getElementById("expand-picture-svg").hidden =
-            isStep3ViewExpanded;
-        document.getElementById("collapse-picture-svg").hidden =
-            !isStep3ViewExpanded;
-        $('[data-toggle="tooltip"]').tooltip("dispose");
-        $('[data-toggle="tooltip"]').tooltip();
-    }),
-);
 
 function onDepthOverrideDecrease(row, col) {
     onDepthOverrideChange(row, col, false);
