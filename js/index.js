@@ -259,8 +259,6 @@ const quantizationAlgorithmToTraditionalDitheringKernel = {
 
 const defaultQuantizationAlgorithmKey = "twoPhase";
 let quantizationAlgorithm = defaultQuantizationAlgorithmKey;
-document.getElementById("quantization-algorithm-button").innerHTML =
-    quantizationAlgorithmsInfo[defaultQuantizationAlgorithmKey].name;
 
 let selectedPixelPartNumber = PIXEL_TYPE_OPTIONS[0].number;
 
@@ -333,14 +331,6 @@ document
             targetResolution[0] * targetResolution[1] * 4,
         ).fill(null);
         runStep2();
-    });
-
-document
-    .getElementById("color-tie-grouping-factor-slider")
-    .addEventListener("change", () => {
-        document.getElementById("color-tie-grouping-factor-text").innerHTML =
-            document.getElementById("color-tie-grouping-factor-slider").value;
-        runStep4();
     });
 
 let DEFAULT_STUD_MAP = "all_tile_colors";
@@ -423,119 +413,8 @@ function isBleedthroughEnabled() {
 }
 
 let selectedTiebreakTechnique = "alternatingmod";
-const TIEBREAK_TECHNIQUES = [
-    {
-        name: "None",
-        value: "none",
-    },
-    {
-        name: "Random",
-        value: "random",
-    },
-    {
-        name: "Mod 2",
-        value: "mod2",
-    },
-    {
-        name: "Mod 3",
-        value: "mod3",
-    },
-    {
-        name: "Mod 4",
-        value: "mod4",
-    },
-    {
-        name: "Mod 5",
-        value: "mod5",
-    },
-    {
-        name: "Noisy Mod 2",
-        value: "noisymod2",
-    },
-    {
-        name: "Noisy Mod 3",
-        value: "noisymod3",
-    },
-    {
-        name: "Noisy Mod 4",
-        value: "noisymod4",
-    },
-    {
-        name: "Noisy Mod 5",
-        value: "noisymod5",
-    },
-    {
-        name: "Cascading Mod",
-        value: "cascadingmod",
-    },
-    {
-        name: "Cascading Noisy Mod",
-        value: "cascadingnoisymod",
-    },
-    {
-        name: "Alternating Mod",
-        value: "alternatingmod",
-    },
-    {
-        name: "Alternating Noisy Mod",
-        value: "alternatingnoisymod",
-    },
-];
-TIEBREAK_TECHNIQUES.forEach((technique) => {
-    const option = document.createElement("a");
-    option.className = "dropdown-item btn";
-    option.textContent = technique.name;
-    option.value = technique.value;
-    option.addEventListener("click", () => {
-        document.getElementById("color-ties-resolution-button").innerHTML =
-            /*"Color Tie Resolution: " +*/
-            "Strategy: " + technique.name;
-        selectedTiebreakTechnique = technique.value;
-        runStep1();
-    });
-    document
-        .getElementById("color-ties-resolution-options")
-        .appendChild(option);
-});
 
 let selectedInterpolationAlgorithm = "default";
-const INTERPOLATION_ALGORITHMS = [
-    {
-        name: "Browser Default",
-        value: "default",
-    },
-    {
-        name: "Average Pooling",
-        value: "avgPooling",
-    },
-    {
-        name: "Dual Min Max Pooling",
-        value: "dualMinMaxPooling",
-    },
-    {
-        name: "Min Pooling",
-        value: "minPooling",
-    },
-    {
-        name: "Max Pooling",
-        value: "maxPooling",
-    },
-];
-INTERPOLATION_ALGORITHMS.forEach((algorithm) => {
-    const option = document.createElement("a");
-    option.className = "dropdown-item btn";
-    option.textContent = algorithm.name;
-    option.value = algorithm.value;
-    option.addEventListener("click", () => {
-        document.getElementById("interpolation-algorithm-button").innerHTML =
-            algorithm.name;
-        selectedInterpolationAlgorithm = algorithm.value;
-        runStep2();
-    });
-    document
-        .getElementById("interpolation-algorithm-options")
-        .appendChild(option);
-});
 
 // Color distance stuff
 function d3ColorDistanceWrapper(d3DistanceFunction) {
@@ -580,24 +459,6 @@ const colorDistanceFunctionsInfo = {
 const defaultDistanceFunctionKey = "ciede2000";
 let colorDistanceFunction =
     colorDistanceFunctionsInfo[defaultDistanceFunctionKey].func;
-document.getElementById("distance-function-button").innerHTML =
-    colorDistanceFunctionsInfo[defaultDistanceFunctionKey].name;
-
-Object.keys(colorDistanceFunctionsInfo).forEach((key) => {
-    const distanceFunction = colorDistanceFunctionsInfo[key];
-    const option = document.createElement("a");
-    option.className = "dropdown-item btn";
-    option.textContent = distanceFunction.name;
-    option.value = key;
-    option.addEventListener("click", () => {
-        document.getElementById("distance-function-button").innerHTML =
-            distanceFunction.name;
-        colorDistanceFunction = distanceFunction.func;
-        disableInteraction();
-        runStep3();
-    });
-    document.getElementById("distance-function-options").appendChild(option);
-});
 
 function onInfinitePieceCountChange() {
     const infiniteCheckbox = document.getElementById(
@@ -632,40 +493,6 @@ function updateForceInfinitePieceCountText() {
     );
     if (warning) warning.hidden = !isInfinitePieceCountForced;
 }
-
-Object.keys(quantizationAlgorithmsInfo).forEach((key) => {
-    const algorithm = quantizationAlgorithmsInfo[key];
-    const option = document.createElement("a");
-    option.className = "dropdown-item btn";
-    option.textContent = algorithm.name;
-    option.value = key;
-    option.addEventListener("click", () => {
-        document.getElementById("quantization-algorithm-button").innerHTML =
-            algorithm.name;
-        quantizationAlgorithm = key;
-
-        // Only 2 phase supports color tie resolution
-        document.getElementById("color-ties-resolution-section").hidden =
-            quantizationAlgorithm != "twoPhase";
-
-        const isTraditionalErrorDithering = Object.keys(
-            quantizationAlgorithmToTraditionalDitheringKernel,
-        ).includes(quantizationAlgorithm);
-        [
-            ...document.getElementsByClassName(
-                "traditional-dithering-algorithm-warning",
-            ),
-        ].forEach((item) => (item.hidden = !isTraditionalErrorDithering));
-        updateForceInfinitePieceCountText();
-
-        disableInteraction();
-        onInfinitePieceCountChange();
-        runStep3();
-    });
-    document
-        .getElementById("quantization-algorithm-options")
-        .appendChild(option);
-});
 
 const DIVIDER = "DIVIDER";
 const STUD_MAP_KEYS = Object.keys(STUD_MAPS);
