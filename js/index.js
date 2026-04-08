@@ -862,82 +862,6 @@ const onValueChange = () => {
     runStep2();
 };
 
-const onBrightnessChange = () => {
-    document.getElementById("brightness-text").innerHTML =
-        (document.getElementById("brightness-slider").value > 0 ? "+" : "") +
-        document.getElementById("brightness-slider").value;
-    runStep2();
-};
-document
-    .getElementById("brightness-slider")
-    .addEventListener("change", onBrightnessChange, false);
-document.getElementById("brightness-increment").addEventListener(
-    "click",
-    () => {
-        if (
-            Number(document.getElementById("brightness-slider").value) <
-            Number(document.getElementById("brightness-slider").max)
-        ) {
-            document.getElementById("brightness-slider").value =
-                Number(document.getElementById("brightness-slider").value) + 1;
-            onBrightnessChange();
-        }
-    },
-    false,
-);
-document.getElementById("brightness-decrement").addEventListener(
-    "click",
-    () => {
-        if (
-            Number(document.getElementById("brightness-slider").value) >
-            Number(document.getElementById("brightness-slider").min)
-        ) {
-            document.getElementById("brightness-slider").value =
-                Number(document.getElementById("brightness-slider").value) - 1;
-            onBrightnessChange();
-        }
-    },
-    false,
-);
-
-const onContrastChange = () => {
-    document.getElementById("contrast-text").innerHTML =
-        (document.getElementById("contrast-slider").value > 0 ? "+" : "") +
-        document.getElementById("contrast-slider").value;
-    runStep2();
-};
-document
-    .getElementById("contrast-slider")
-    .addEventListener("change", onContrastChange, false);
-document.getElementById("contrast-increment").addEventListener(
-    "click",
-    () => {
-        if (
-            Number(document.getElementById("contrast-slider").value) <
-            Number(document.getElementById("contrast-slider").max)
-        ) {
-            document.getElementById("contrast-slider").value =
-                Number(document.getElementById("contrast-slider").value) + 1;
-            onContrastChange();
-        }
-    },
-    false,
-);
-document.getElementById("contrast-decrement").addEventListener(
-    "click",
-    () => {
-        if (
-            Number(document.getElementById("contrast-slider").value) >
-            Number(document.getElementById("contrast-slider").min)
-        ) {
-            document.getElementById("contrast-slider").value =
-                Number(document.getElementById("contrast-slider").value) - 1;
-            onContrastChange();
-        }
-    },
-    false,
-);
-
 function onDepthMapCountChange() {
     const numLevels = Number(
         document.getElementById("num-depth-levels-slider").value,
@@ -981,28 +905,6 @@ function onDepthMapCountChange() {
 document
     .getElementById("num-depth-levels-slider")
     .addEventListener("change", onDepthMapCountChange, false);
-
-document.getElementById("reset-brightness-button").addEventListener(
-    "click",
-    () => {
-        document.getElementById("brightness-slider").value = 0;
-        document.getElementById("brightness-text").innerHTML =
-            document.getElementById("brightness-slider").value;
-        runStep2();
-    },
-    false,
-);
-
-document.getElementById("reset-contrast-button").addEventListener(
-    "click",
-    () => {
-        document.getElementById("contrast-slider").value = 0;
-        document.getElementById("contrast-text").innerHTML =
-            document.getElementById("contrast-slider").value;
-        runStep2();
-    },
-    false,
-);
 
 function runStep1() {
     disableInteraction();
@@ -1059,14 +961,6 @@ function runStep2() {
         );
     }
 
-    inputPixelArray = applyBrightnessAdjustment(
-        inputPixelArray,
-        Number(document.getElementById("brightness-slider").value),
-    );
-    inputPixelArray = applyContrastAdjustment(
-        inputPixelArray,
-        Number(document.getElementById("contrast-slider").value),
-    );
     step2Canvas.width = targetResolution[0];
     step2Canvas.height = targetResolution[1];
     drawPixelsOnCanvas(inputPixelArray, step2Canvas);
