@@ -1,35 +1,5 @@
-function incrementTransaction(count) {
-    return (count || 0) + 1;
-}
-
 const LOW_DPI = 48;
 const HIGH_DPI = 96;
-
-const interactionSelectors = [
-    "input-image-selector",
-    "input-image-selector-hidden",
-    "mix-in-stud-map-button",
-    "width-slider",
-    "height-slider",
-    "hue-slider",
-    "saturation-slider",
-    "value-slider",
-    "reset-hsv-button",
-    "reset-brightness-button",
-    "reset-contrast-button",
-    "add-custom-stud-button",
-    "export-to-bricklink-button",
-    "import-stud-map-file-input",
-    "bricklink-piece-button",
-    "clear-overrides-button",
-    "clear-custom-studs-button",
-    "infinite-piece-count-check",
-    "color-ties-resolution-button",
-    "resolution-limit-increase-button",
-    "high-quality-instructions-check",
-    "num-depth-levels-slider",
-    "high-quality-depth-instructions-check",
-].map((id) => document.getElementById(id));
 
 const customStudTableBody = document.getElementById("custom-stud-table-body");
 
@@ -95,11 +65,9 @@ const step1DepthCanvasUpscaledContext =
     step1DepthCanvasUpscaled.getContext("2d");
 
 const step2Canvas = document.getElementById("step-2-canvas");
-const step2CanvasContext = step2Canvas.getContext("2d");
 const step2CanvasUpscaled = document.getElementById("step-2-canvas-upscaled");
 const step2CanvasUpscaledContext = step2CanvasUpscaled.getContext("2d");
 const step2DepthCanvas = document.getElementById("step-2-depth-canvas");
-const step2DepthCanvasContext = step2DepthCanvas.getContext("2d");
 const step2DepthCanvasUpscaled = document.getElementById(
     "step-2-depth-canvas-upscaled",
 );

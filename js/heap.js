@@ -1,10 +1,5 @@
 "use strict";
 
-// Object.defineProperty(exports, "__esModule", {
-//   value: true
-// });
-// exports.toInt = exports.default = exports.Heap = void 0;
-
 let _Symbol$iterator;
 
 function _defineProperty(obj, key, value) {
@@ -27,7 +22,6 @@ const toInt = (n) => ~~n;
  * @type {Class}
  */
 
-// exports.toInt = toInt;
 _Symbol$iterator = Symbol.iterator;
 
 class Heap {
@@ -221,7 +215,11 @@ class Heap {
                         .map((el) => {
                             // centered
                             const half = (maxLength - el.length) / 2;
-                            return repeat(" ", Math.ceil(half)) + el + repeat(" ", Math.floor(half));
+                            return (
+                                repeat(" ", Math.ceil(half)) +
+                                el +
+                                repeat(" ", Math.floor(half))
+                            );
                         })
                         .join(repeat(" ", times * maxLength))
                 );
@@ -416,7 +414,10 @@ class Heap {
      */
 
     check() {
-        return this.heapArray.find((el, j) => !!this.getChildrenOf(j).find((ch) => this.compare(el, ch) > 0));
+        return this.heapArray.find(
+            (el, j) =>
+                !!this.getChildrenOf(j).find((ch) => this.compare(el, ch) > 0),
+        );
     }
     /**
      * Remove all of the elements from this heap.
@@ -774,7 +775,10 @@ class Heap {
      * @param  {Number} k Another node index
      */
     _moveNode(j, k) {
-        [this.heapArray[j], this.heapArray[k]] = [this.heapArray[k], this.heapArray[j]];
+        [this.heapArray[j], this.heapArray[k]] = [
+            this.heapArray[k],
+            this.heapArray[j],
+        ];
     }
     /**
      * Move a node down the tree (to the leaves) to find a place where the heap is sorted.
@@ -786,7 +790,10 @@ class Heap {
         const self = this.heapArray[i];
 
         const getPotentialParent = (best, j) => {
-            if (this.heapArray.length > j && this.compare(this.heapArray[j], this.heapArray[best]) < 0) {
+            if (
+                this.heapArray.length > j &&
+                this.compare(this.heapArray[j], this.heapArray[best]) < 0
+            ) {
                 best = j;
             }
 
@@ -795,10 +802,16 @@ class Heap {
 
         while (moveIt) {
             const childrenIdx = Heap.getChildrenIndexOf(i);
-            const bestChildIndex = childrenIdx.reduce(getPotentialParent, childrenIdx[0]);
+            const bestChildIndex = childrenIdx.reduce(
+                getPotentialParent,
+                childrenIdx[0],
+            );
             const bestChild = this.heapArray[bestChildIndex];
 
-            if (typeof bestChild !== "undefined" && this.compare(self, bestChild) > 0) {
+            if (
+                typeof bestChild !== "undefined" &&
+                this.compare(self, bestChild) > 0
+            ) {
                 this._moveNode(i, bestChildIndex);
 
                 i = bestChildIndex;
@@ -818,7 +831,10 @@ class Heap {
         while (moveIt) {
             const pi = Heap.getParentIndexOf(i);
 
-            if (pi >= 0 && this.compare(this.heapArray[pi], this.heapArray[i]) > 0) {
+            if (
+                pi >= 0 &&
+                this.compare(this.heapArray[pi], this.heapArray[i]) > 0
+            ) {
                 this._moveNode(i, pi);
 
                 i = pi;
@@ -877,7 +893,11 @@ class Heap {
         const indices = [];
 
         for (let i = branch; i < n; ++i) {
-            indices.push(...Heap.getChildrenIndexOf(i).filter((l) => l < heapArray.length));
+            indices.push(
+                ...Heap.getChildrenIndexOf(i).filter(
+                    (l) => l < heapArray.length,
+                ),
+            );
         }
 
         if ((n - 1) % 2) {
@@ -950,9 +970,5 @@ class Heap {
         return heap.peek();
     }
 }
-
-// exports.Heap = Heap;
-// var _default = Heap;
-// exports.default = _default;
 
 window.Heap = Heap;

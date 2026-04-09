@@ -5,16 +5,6 @@ availableTileHexes.forEach((hex) => {
 });
 
 STUD_MAPS = {
-    // rgb: {
-    //     name: "RGB",
-    //     officialName: "RGB Example",
-    //     sortedStuds: ["#ff6666", "#66ff66", "#6666ff"],
-    //     studMap: {
-    //         "#ff6666": 1000,
-    //         "#66ff66": 1000,
-    //         "#6666ff": 1000
-    //     }
-    // },
     all_tile_colors: {
         name: "All Tile Colors",
         officialName: "All Available Tile Colors",
