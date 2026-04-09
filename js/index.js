@@ -100,6 +100,13 @@ const INCHES_IN_CM = 0.393701;
 const SCALING_FACTOR = 40;
 const PLATE_WIDTH = 16;
 
+const step1Text = document.getElementById("step-1-content");
+const step1Span = document.createElement("span");
+step1Span.style.fontSize = "15px";
+step1Span.style.verticalAlign = "top";
+step1Span.textContent = `   W: ${targetResolution[0] / PLATE_WIDTH} plate - H: ${targetResolution[1] / PLATE_WIDTH} plate`;
+step1Text.appendChild(step1Span);
+
 document.getElementById("width-text").title =
     `${(targetResolution[0] * PIXEL_WIDTH_CM).toFixed(1)} cm, ${(
         targetResolution[0] *
@@ -187,6 +194,12 @@ document.getElementById("width-slider").addEventListener(
             document.getElementById("width-slider").value;
         targetResolution[0] = document.getElementById("width-slider").value;
         handleResolutionChange();
+        // const step1Span = document.createElement("span");
+        // step1Span.style.fontSize = "15px";
+        // step1Span.style.verticalAlign = "top";
+        step1Span.textContent = `   W: ${targetResolution[0] / PLATE_WIDTH} plate - H: ${targetResolution[1] / PLATE_WIDTH} plate`;
+        // step1Text.appendChild(step1Span);
+        // step1Text.textContent = `Step 1   W: ${targetResolution[0] / PLATE_WIDTH} plate - H: ${targetResolution[1] / PLATE_WIDTH} plate`;
     },
     false,
 );
@@ -198,6 +211,12 @@ document.getElementById("height-slider").addEventListener(
             document.getElementById("height-slider").value;
         targetResolution[1] = document.getElementById("height-slider").value;
         handleResolutionChange();
+        // step1Text.textContent = `Step 1   W: ${targetResolution[0] / PLATE_WIDTH} plate - H: ${targetResolution[1] / PLATE_WIDTH} plate`;
+        // const step1Span = document.createElement("span");
+        // step1Span.style.fontSize = "15px";
+        // step1Span.style.verticalAlign = "top";
+        step1Span.textContent = `   W: ${targetResolution[0] / PLATE_WIDTH} plate - H: ${targetResolution[1] / PLATE_WIDTH} plate`;
+        // step1Text.appendChild(step1Span);
     },
     false,
 );

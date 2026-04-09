@@ -25,6 +25,14 @@
     <meta name="theme-color" content="#FCE4EC" />
 
     <style>
+      .row {
+        justify-content: space-around;
+      }
+
+      #step-1-content span {
+        margin-left: 10px;
+      }
+
       a {
         text-decoration: none !important;
       }
@@ -194,7 +202,7 @@
     </div>
 
     <div class="row" id="steps-row" hidden>
-      <div id="step-1" class="col-6 col-md-3 hide-on-step-3-expansion">
+      <div id="step-1" class="col-4 hide-on-step-3-expansion">
         <div class="card" style="padding: 10px; margin-bottom: 10px">
           <div class="tab-content">
             <div
@@ -207,7 +215,7 @@
                 <canvas id="step-1-canvas-upscaled" style="width: 100%" class="cropper-img"></canvas>
               </div>
               <br />
-              <h4>Step 1</h4>
+              <h4 id="step-1-content">Step 1</h4>
               <div id="step-1-accordion">
                 <br />
                 <div class="card accordion-card">
@@ -312,7 +320,7 @@
         </div>
       </div>
 
-      <div hidden id="step-2" class="col-6 col-md-3">
+      <div hidden id="step-2" class="col-4">
         <div class="card" style="padding: 10px; margin-bottom: 10px">
           <ul class="nav nav-tabs 3d-selector-tabs" role="tablist" hidden>
             <li class="nav-item">
@@ -480,7 +488,7 @@
         </div>
       </div>
 
-      <div id="step-3" class="col-6 col-md-3">
+      <div id="step-3" class="col-4">
         <div class="card" style="padding: 10px; margin-bottom: 10px">
           <ul class="nav nav-tabs 3d-selector-tabs" role="tablist" hidden>
             <li class="nav-item">
@@ -698,7 +706,7 @@
         </div>
       </div>
 
-      <div id="step-4" class="col-6 col-md-3 hide-on-step-3-expansion">
+      <div id="step-4" class="col-4 hide-on-step-3-expansion">
         <div class="card" style="padding: 10px; margin-bottom: 10px">
           <ul class="nav nav-tabs 3d-selector-tabs" role="tablist" hidden>
             <li class="nav-item">
