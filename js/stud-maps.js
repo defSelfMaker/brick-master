@@ -4,7 +4,7 @@ availableTileHexes.forEach((hex) => {
     tileHexToCount[hex] = 99999;
 });
 
-STUD_MAPS = {
+const STUD_MAPS = {
     all_tile_colors: {
         name: "All Tile Colors",
         officialName: "All Available Tile Colors",
