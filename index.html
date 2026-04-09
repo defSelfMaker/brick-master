@@ -22,7 +22,6 @@
     <title>Brick Master</title>
 
     <meta name="description" content="The Intelligent, Easy to Use Lego Mosaic Maker" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#FCE4EC" />
 
     <style>
@@ -67,10 +66,6 @@
       h4 {
         line-height: 20px;
         margin-bottom: 0;
-      }
-
-      step-header-subtitle {
-        margin-left: 2px;
       }
 
       #nonzero-missing-pieces-warning {
@@ -124,16 +119,6 @@
           left: 100%;
           width: 50%;
         }
-      }
-
-      footer {
-        bottom: 0;
-        width: 100%;
-      }
-
-      .footer {
-        height: 50px;
-        text-align: center;
       }
     </style>
 
@@ -221,9 +206,10 @@
               <div style="width: 100%">
                 <canvas id="step-1-canvas-upscaled" style="width: 100%" class="cropper-img"></canvas>
               </div>
+              <br />
               <h4>Step 1</h4>
-              <small className="step-header-subtitle">Crop + Scale input image</small>
               <div id="step-1-accordion">
+                <br />
                 <div class="card accordion-card">
                   <div class="card-header" id="step-1-1-heading">
                     <h5 class="mb-0">
@@ -326,7 +312,7 @@
         </div>
       </div>
 
-      <div id="step-2" class="col-6 col-md-3 hide-on-step-3-expansion">
+      <div hidden id="step-2" class="col-6 col-md-3">
         <div class="card" style="padding: 10px; margin-bottom: 10px">
           <ul class="nav nav-tabs 3d-selector-tabs" role="tablist" hidden>
             <li class="nav-item">
@@ -363,9 +349,6 @@
             >
               <canvas id="step-2-canvas" hidden></canvas>
               <canvas id="step-2-canvas-upscaled" style="width: 100%"></canvas>
-              <h4>Step 2</h4>
-              <small className="step-header-subtitle">Interpolate + Adjust colors</small>
-
             </div>
             <div
               class="tab-pane fade"
@@ -377,7 +360,6 @@
               <canvas id="step-2-depth-canvas" hidden></canvas>
               <canvas id="step-2-depth-canvas-upscaled" style="width: 100%"></canvas>
               <h4>Step 2</h4>
-              <small className="step-header-subtitle">Make depth discrete</small>
               <div id="step-2-depth-accordion">
                 <div class="card accordion-card">
                   <div class="card-header" id="step-2-depth-1-heading">
@@ -533,20 +515,13 @@
               role="tabpanel"
               aria-labelledby="step-3-color-tab"
             >
-              <canvas id="step-3-canvas" hidden></canvas>
-              <canvas id="step-3-canvas-upscaled" style="width: 100%"></canvas>
-              <h4>Step 3</h4>
-              <small className="step-header-subtitle">Align to closest pixel from available colors</small>
+              <div>
+                <canvas id="step-3-canvas" hidden></canvas>
+                <canvas id="step-3-canvas-upscaled" style="width: 100%"></canvas>
+              </div>
               <br />
-              <span
-                data-toggle="tooltip"
-                title="This is the average per pixel quantization error. The lower this value is, the closer this image is to the image in step 2 (according to the chosen color distance function)"
-                data-placement="top"
-              >
-                <small>Average</small> &#x3F5;:
-                <small id="step-3-quantization-error"></small>
-              </span>
-
+              <h4>Step 2</h4>
+              <br />
               <div style="display: flex; flex-direction: row; flex-wrap: wrap">
                 <div style="margin-bottom: 4px">
                   <div class="btn-group">
@@ -669,6 +644,55 @@
             >
               <canvas id="step-3-depth-canvas" hidden></canvas>
               <canvas id="step-3-depth-canvas-upscaled" style="width: 100%"></canvas>
+              <h4>Step 3</h4>
+              <div id="step-3-depth-accordion">
+                <div class="card accordion-card">
+                  <div class="card-header" id="step-3-depth-1-heading">
+                    <h5 class="mb-0">
+                      <button
+                        class="btn btn-link collapsed"
+                        data-toggle="collapse"
+                        data-target="#step-3-depth-1-collapse"
+                        aria-expanded="false"
+                        aria-controls="step-3-depth-1-collapse"
+                      >
+                        Edit Depth
+                      </button>
+                    </h5>
+                  </div>
+                  <div
+                    id="step-3-depth-1-collapse"
+                    class="collapse"
+                    aria-labelledby="step-3-depth-1-heading"
+                    data-parent="#step-3-depth-accordion"
+                  >
+                    <div class="card-body accordion-card-body">
+                      <div style="margin-left: 4px; margin-top: 8px">
+                        <button class="btn btn-warning" type="button" id="clear-depth-overrides-button">
+                          Clear Overrides
+                        </button>
+                      </div>
+                      <small>
+                        <p style="margin-top: 4px; margin-left: 4px; margin-bottom: 4px">
+                          &#9679; Click a pixel to increase its height
+                        </p>
+                        <p style="margin-top: 4px; margin-left: 4px; margin-bottom: 4px">
+                          &#9679; Click a pixel to decrease its height
+                        </p>
+                      </small>
+
+                      <button
+                        style="margin-top: 8px; margin-left: 4px"
+                        class="btn btn-info"
+                        type="button"
+                        id="toggle-depth-expansion-button"
+                      >
+                        Expand Picture
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -709,23 +733,14 @@
               role="tabpanel"
               aria-labelledby="step-4-color-tab"
             >
-              <canvas id="step-4-canvas" hidden></canvas>
-              <canvas id="bricklink-cache-canvas" hidden></canvas>
-              <canvas id="step-4-canvas-upscaled" style="width: 100%"></canvas>
-              <h4>Step 4</h4>
-              <small className="step-header-subtitle">Correct for available pieces, if piece counts are limited</small>
-              <br />
-              <div className="step-header-subtitle text-danger" id="nonzero-missing-pieces-warning" hidden>
-                <small>'Missing Pieces' under 'Available Colors' must be 0 </small>
+              <div>
+                <canvas id="step-4-canvas" hidden></canvas>
+                <canvas id="bricklink-cache-canvas" hidden></canvas>
+                <canvas id="step-4-canvas-upscaled" style="width: 100%"></canvas>
               </div>
-              <span
-                data-toggle="tooltip"
-                title="This is the average per pixel quantization error. The lower this value is, the closer this image is to the image in step 2 (according to the chosen color distance function). If this is significantly higher than the quantization error from step 3, see 'Pieces Missing From Step 3' under 'Pieces Used' to determine which additional pieces can be used to improve the image."
-                data-placement="top"
-              >
-                <small>Average</small> &#x3F5;:
-                <small id="step-4-quantization-error"></small>
-              </span>
+              <br />
+              <h4>Step 3</h4>
+              <br />
               <div id="step-4-accordion">
                 <div class="card accordion-card">
                   <div class="card-header" id="step-4-1-heading">
@@ -828,250 +843,6 @@
                           <span style="font-size: 13px">High quality pdf</span>
                         </label>
                       </div>
-                      <small>
-                        <p style="margin-left: 4px; margin-bottom: 4px">
-                          Longer instructions may be split into multiple files
-                        </p>
-                        <p style="margin-left: 4px; margin-bottom: 4px">Color names are Bricklink colors</p>
-                      </small>
-                      <div style="margin-left: 4px; margin-bottom: 4px">
-                        <small>
-                          <b style="color: #ff4c00">Important</b>
-                          <p>
-                            Depending on your hardware and the resolution you've chosen, the pdf can take quite a few
-                            seconds to generate. Be prepared to wait if you're generating instructions for larger
-                            resolutions, especially for high quality pdfs. Larger resolutions may also cause some
-                            slowness on the page or may not work at all on less powerful devices, so I recommend
-                            starting at the default and then going up.
-                          </p>
-                        </small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade show"
-              id="step-4-depth-tab-content"
-              role="tabpanel"
-              aria-labelledby="step-4-depth-tab"
-            >
-              <div id="step-4-canvas-3d-upscaled" style="width: 100%"></div>
-              <h4 style="margin-top: 4px; padding-bottom: 4px">3D Preview</h4>
-              <small className="step-header-subtitle"
-                >If you can't see the 3D effect when hovering your mouse over the image, check the input from depth step
-                1</small
-              >
-              <div id="step-4-depth-accordion">
-                <div class="card accordion-card">
-                  <div class="card-header" id="step-4-depth-1-heading">
-                    <h5 class="mb-0">
-                      <button
-                        class="btn btn-link collapsed"
-                        data-toggle="collapse"
-                        data-target="#step-4-depth-1-collapse"
-                        aria-expanded="false"
-                        aria-controls="step-4-depth-1-collapse"
-                      >
-                        Tips
-                      </button>
-                    </h5>
-                  </div>
-                  <div
-                    id="step-4-depth-1-collapse"
-                    class="collapse"
-                    aria-labelledby="step-4-depth-1-heading"
-                    data-parent="#step-4-depth-accordion"
-                  >
-                    <div class="card-body accordion-card-body">
-                      <div style="width: 100%">
-                        <div>
-                          <small id="height-text"><b>Preview effect intensity</b></small>
-                        </div>
-                        <input
-                          type="range"
-                          id="3d-effect-intensity"
-                          name="points"
-                          min="0.015"
-                          max="0.03"
-                          step="0.005"
-                          value="0.01"
-                          style="width: 100%"
-                        />
-                      </div>
-                      <small>
-                        <p style="margin-left: 4px; margin-bottom: 8px">
-                          &#9679; This is a (very) rough preview of what the 3D effect might look like
-                        </p>
-                        <p style="margin-left: 4px; margin-bottom: 8px">
-                          &#9679; Hover your mouse over the image to vary the perspective
-                        </p>
-                        <p style="margin-left: 4px; margin-bottom: 8px">
-                          &#9679; Make sure your depth map is not blank
-                        </p>
-                        <p style="margin-left: 4px; margin-bottom: 8px">
-                          &#9679; This is unlikely to work well on less powerful devices, since this is generated
-                          dynamically
-                        </p>
-                        <p style="margin-left: 4px; margin-bottom: 8px">
-                          &#9679; Keep in mind that the effect varies from browser to browser, can be subtle, and may
-                          not be 100% representative of what the physical art piece would look like
-                        </p>
-                      </small>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="card accordion-card">
-                  <div class="card-header" id="step-4-depth-4-heading">
-                    <h5 class="mb-0">
-                      <button
-                        class="btn btn-link collapsed"
-                        data-toggle="collapse"
-                        data-target="#step-4-depth-4-collapse"
-                        aria-expanded="false"
-                        aria-controls="step-4-depth-4-collapse"
-                      >
-                        Depth Plates
-                      </button>
-                    </h5>
-                  </div>
-                  <div
-                    id="step-4-depth-4-collapse"
-                    class="collapse"
-                    aria-labelledby="step-4-depth-4-heading"
-                    data-parent="#step-4-depth-accordion"
-                  >
-                    <div class="card-body accordion-card-body">
-                      <small>
-                        <p style="margin-left: 4px; margin-bottom: 4px">
-                          &#9679; This is the set of plates that may be used to generate depth instructions and piece
-                          lists
-                        </p>
-                        <p style="margin-left: 4px; margin-bottom: 4px">
-                          &#9679; These pieces are used as padding so that the correct pixels protrude outwards
-                        </p>
-                        <p style="margin-left: 4px; margin-bottom: 4px">
-                          &#9679; Note that larger plates may be difficult to attach/detach from the base
-                        </p>
-                        <b style="margin-left: 4px; margin-bottom: 2px">Available Plates:</b>
-                      </small>
-                      <div id="depth-plates-container"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="card accordion-card">
-                  <div class="card-header" id="step-4-depth-2-heading">
-                    <h5 class="mb-0">
-                      <button
-                        class="btn btn-link collapsed"
-                        data-toggle="collapse"
-                        data-target="#step-4-depth-2-collapse"
-                        aria-expanded="false"
-                        aria-controls="step-4-depth-2-collapse"
-                      >
-                        Instructions
-                      </button>
-                    </h5>
-                  </div>
-                  <div
-                    id="step-4-depth-2-collapse"
-                    class="collapse"
-                    aria-labelledby="step-4-depth-2-heading"
-                    data-parent="#step-4-depth-accordion"
-                  >
-                    <div class="card-body accordion-card-body">
-                      <div class="progress" style="height: 37px" id="depth-pdf-progress-container" hidden>
-                        <div
-                          class="progress-bar"
-                          id="depth-pdf-progress-bar"
-                          role="progressbar"
-                          style="background-color: #17a2b8; transition: none"
-                        ></div>
-                      </div>
-                      <button
-                        type="button"
-                        id="download-depth-instructions-button"
-                        class="btn btn-info"
-                        style="margin-top: 8px"
-                      >
-                        Generate Depth Instructions PDF
-                      </button>
-                      <div id="depth-instructions-canvas-container" hidden></div>
-                      <div class="checkbox" style="margin-top: 4px; margin-left: 4px">
-                        <label class="checkbox-clickable">
-                          <input
-                            type="checkbox"
-                            class="checkbox-clickable"
-                            id="high-quality-depth-instructions-check"
-                          />
-                          <span style="font-size: 13px">High quality pdf</span>
-                        </label>
-                      </div>
-                      <small>
-                        <p style="margin-left: 4px; margin-bottom: 4px">
-                          Longer instructions may be split into multiple files
-                        </p>
-                      </small>
-                      <div style="margin-left: 4px; margin-bottom: 4px">
-                        <small>
-                          <b style="color: #ff4c00">Important</b>
-                          <p>
-                            Depending on your hardware and the resolution you've chosen, the pdf can take quite a few
-                            seconds to generate. Be prepared to wait if you're generating instructions for larger
-                            resolutions, especially for high quality pdfs. Larger resolutions may also cause some
-                            slowness on the page or may not work at all on less powerful devices, so I recommend
-                            starting at the default and then going up.
-                          </p>
-                        </small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="card accordion-card">
-                  <div class="card-header" id="step-4-depth-3-heading">
-                    <h5 class="mb-0">
-                      <button
-                        class="btn btn-link collapsed"
-                        data-toggle="collapse"
-                        data-target="#step-4-depth-3-collapse"
-                        aria-expanded="false"
-                        aria-controls="step-4-depth-3-collapse"
-                      >
-                        Pieces Used
-                      </button>
-                    </h5>
-                  </div>
-                  <div
-                    id="step-4-depth-3-collapse"
-                    class="collapse"
-                    aria-labelledby="step-4-depth-3-heading"
-                    data-parent="#step-4-depth-accordion"
-                  >
-                    <div class="card-body accordion-card-body">
-                      <button
-                        type="button"
-                        id="export-depth-to-bricklink-button"
-                        class="btn btn-info"
-                        disabled
-                        style="margin-bottom: 10px; margin-top: 8px"
-                      >
-                        Copy Bricklink XML to Clipboard
-                      </button>
-                      <small style="margin-left: 4px">
-                        <a href="https://www.bricklink.com/v2/wanted/upload.page" target="_blank">
-                          Bricklink Upload Page
-                        </a>
-                      </small>
-                      <br />
-                      <small style="margin-left: 4px">
-                        <a href="https://www.lego.com/en-us/page/static/pick-a-brick" target="_blank">
-                          U.S. Pick a Brick Page
-                        </a>
-                      </small>
                     </div>
                   </div>
                 </div>
@@ -1095,26 +866,6 @@
                 Select Input Image
               </button>
             </div>
-          </span>
-          <small hidden
-            ><a
-              target="_blank"
-              id="hogwarts-crest-example-instructions-link"
-              href="assets/pdf/lego-art-remix-discount-hogwarts-crest-instructions.pdf"
-            >
-              Example use case</a
-            >
-            - this is a full Hogwarts crest created by the algorithm with just 1 copy of
-            <a
-              target="_blank"
-              id="31201-lego-website-link"
-              href="https://www.lego.com/en-us/product/harry-potter-hogwarts-crests-31201"
-              >set 31201</a
-            ></small
-          >
-          <span id="run-example-input-container" hidden>
-            <span style="margin-left: 8px; margin-right: 8px; font-weight: 600">Or</span>
-            <button class="btn btn-success" type="button" id="run-example-input" disabled>See an Example</button>
           </span>
         </div>
       </div>

@@ -293,6 +293,15 @@ document
         runStep2();
     });
 
+document
+    .getElementById("clear-depth-overrides-button")
+    .addEventListener("click", () => {
+        overrideDepthPixelArray = new Array(
+            targetResolution[0] * targetResolution[1] * 4,
+        ).fill(null);
+        runStep2();
+    });
+
 let DEFAULT_STUD_MAP = "all_tile_colors";
 let DEFAULT_COLOR = "#853433";
 let DEFAULT_COLOR_NAME = "154";
@@ -989,14 +998,6 @@ function runStep3() {
         : alignedPixelArray;
     step3DepthCanvasPixelsForHover = adjustedDepthPixelArray;
 
-    const step3QuantizationError = getAverageQuantizationError(
-        fiteredPixelArray,
-        alignedPixelArray,
-        colorDistanceFunction,
-    );
-    document.getElementById("step-3-quantization-error").innerHTML =
-        step3QuantizationError.toFixed(3);
-
     setTimeout(() => {
         if (!isStep3ViewExpanded) {
             runStep4();
@@ -1035,6 +1036,40 @@ function runStep3() {
 }
 
 let isStep3ViewExpanded = false;
+
+[
+    document.getElementById("toggle-expansion-button"),
+    document.getElementById("toggle-depth-expansion-button"),
+].forEach((button) =>
+    button.addEventListener("click", () => {
+        isStep3ViewExpanded = !isStep3ViewExpanded;
+        const toToggleElements = Array.from(
+            document.getElementsByClassName("hide-on-step-3-expansion"),
+        );
+        if (isStep3ViewExpanded) {
+            toToggleElements.forEach((element) => (element.hidden = true));
+            document.getElementById("toggle-expansion-button").title =
+                "Collapse picture";
+            document.getElementById("toggle-depth-expansion-button").innerHTML =
+                "Collapse Picture";
+            document.getElementById("step-3").className = "col-12";
+        } else {
+            toToggleElements.forEach((element) => (element.hidden = false));
+            document.getElementById("toggle-expansion-button").title =
+                "Expand picture";
+            document.getElementById("toggle-depth-expansion-button").innerHTML =
+                "Expand Picture";
+            document.getElementById("step-3").className = "col-6 col-md-3";
+            runStep1();
+        }
+        document.getElementById("expand-picture-svg").hidden =
+            isStep3ViewExpanded;
+        document.getElementById("collapse-picture-svg").hidden =
+            !isStep3ViewExpanded;
+        $('[data-toggle="tooltip"]').tooltip("dispose");
+        $('[data-toggle="tooltip"]').tooltip();
+    }),
+);
 
 function onDepthOverrideDecrease(row, col) {
     onDepthOverrideChange(row, col, false);
@@ -1673,35 +1708,6 @@ function depthPreviewResize() {
 
 window.addEventListener("resize", depthPreviewResize);
 
-step4Canvas3dUpscaled.addEventListener("mousemove", function (e) {
-    if (
-        // for perf
-        document.getElementById("step-4-depth-tab").className.includes("active")
-    ) {
-        const { img, displacementFilter } = window.depthPreviewOptions;
-        const displacementScale = Number(
-            document.getElementById("3d-effect-intensity").value,
-        );
-        const rawX =
-            event.clientX - step4Canvas3dUpscaled.getBoundingClientRect().x;
-        const rawY =
-            event.clientY - step4Canvas3dUpscaled.getBoundingClientRect().y;
-        displacementFilter.scale.x = (img.width / 2 - rawX) * displacementScale;
-        displacementFilter.scale.y =
-            (img.height / 2 - rawY) * displacementScale;
-    }
-});
-step4Canvas3dUpscaled.addEventListener("mouseleave", function (e) {
-    if (
-        // for perf
-        document.getElementById("step-4-depth-tab").className.includes("active")
-    ) {
-        const { displacementFilter } = window.depthPreviewOptions;
-        displacementFilter.scale.x = 0;
-        displacementFilter.scale.y = 0;
-    }
-});
-
 function runStep4(asyncCallback) {
     const step2PixelArray = getPixelArrayFromCanvas(step2Canvas);
     const step3PixelArray = getPixelArrayFromCanvas(step3Canvas);
@@ -1797,14 +1803,6 @@ function runStep4(asyncCallback) {
         }
 
         drawPixelsOnCanvas(availabilityCorrectedPixelArray, step4Canvas);
-
-        const step4QuantizationError = getAverageQuantizationError(
-            step2PixelArray,
-            availabilityCorrectedPixelArray,
-            colorDistanceFunction,
-        );
-        document.getElementById("step-4-quantization-error").innerHTML =
-            step4QuantizationError.toFixed(3);
 
         setTimeout(async () => {
             step4CanvasUpscaledContext.imageSmoothingEnabled = false;
@@ -2390,32 +2388,6 @@ document
     .getElementById("download-instructions-button")
     .addEventListener("click", async () => {
         await generateInstructions();
-    });
-
-document
-    .getElementById("download-depth-instructions-button")
-    .addEventListener("click", async () => {
-        await generateDepthInstructions();
-    });
-
-document
-    .getElementById("export-depth-to-bricklink-button")
-    .addEventListener("click", () => {
-        disableInteraction();
-        const depthPixelArray = getPixelArrayFromCanvas(step3DepthCanvas);
-        const usedPlatesMatrices = getUsedPlateMatrices(depthPixelArray);
-        const depthPartsMap = getUsedDepthPartsMap(usedPlatesMatrices.flat());
-
-        navigator.clipboard
-            .writeText(getDepthWantedListXML(depthPartsMap))
-            .then(
-                function () {
-                    enableInteraction();
-                },
-                function (err) {
-                    console.error("Async: Could not copy text: ", err);
-                },
-            );
     });
 
 const SERIALIZE_EDGE_LENGTH = 512;
