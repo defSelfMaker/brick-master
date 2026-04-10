@@ -627,6 +627,7 @@ function generateInstructionTitlePage(
     finalImageCanvas,
     canvas,
     pixelType,
+    includeSides = false,
 ) {
     const ctx = canvas.getContext("2d");
 
@@ -657,7 +658,7 @@ function generateInstructionTitlePage(
 
     ctx.fillStyle = "#000000";
     ctx.font = `${scalingFactor * 2}px Arial`;
-    ctx.fillText("Lego Art Remix", pictureWidth * 0.75, pictureHeight * 0.28);
+    ctx.fillText("Brick Master", pictureWidth * 0.75, pictureHeight * 0.28);
     ctx.font = `${scalingFactor / 2}px Arial`;
     ctx.fillText(
         `Resolution: ${width} x ${pixelArray.length / (4 * width)}`,
@@ -704,6 +705,18 @@ function generateInstructionTitlePage(
             legendVerticalOffset + (vertIndex + 0.65) * legendSquareSide,
         );
         ctx.stroke();
+    }
+
+    const totalWPlate = Number(width) / 16;
+    const totalHPlate = Number(pixelArray.length / (4 * width)) / 16;
+    const totalFrameEdges = totalWPlate * 2 - 2 + (totalHPlate * 2 - 2);
+
+    if (includeSides) {
+        ctx.fillText(
+            `Frame angle x4 - Frame edge x${totalFrameEdges}`,
+            pictureWidth * 0.75,
+            pictureHeight * 0.4,
+        );
     }
 }
 

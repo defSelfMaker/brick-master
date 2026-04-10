@@ -229,15 +229,6 @@ document
         runStep2();
     });
 
-document
-    .getElementById("clear-depth-overrides-button")
-    .addEventListener("click", () => {
-        overrideDepthPixelArray = new Array(
-            targetResolution[0] * targetResolution[1] * 4,
-        ).fill(null);
-        runStep2();
-    });
-
 let DEFAULT_STUD_MAP = "all_tile_colors";
 let DEFAULT_COLOR = "#853433";
 let DEFAULT_COLOR_NAME = "154";
@@ -567,7 +558,7 @@ let isStep3ViewExpanded = false;
                 "Expand picture";
             document.getElementById("toggle-depth-expansion-button").innerHTML =
                 "Expand Picture";
-            document.getElementById("step-3").className = "col-6 col-md-3";
+            document.getElementById("step-3").className = "col-4";
             runStep1();
         }
         document.getElementById("expand-picture-svg").hidden =
@@ -1344,7 +1335,6 @@ function runStep4(asyncCallback) {
             const missingPixelsTableBody = document.getElementById(
                 "studs-missing-table-body",
             );
-            missingPixelsTableBody.innerHTML = "";
 
             let missingPixelsExist = false;
             if (!shouldSideStepStep4) {
@@ -1399,8 +1389,6 @@ function runStep4(asyncCallback) {
                     }
                 });
             }
-            document.getElementById("studs-missing-container").hidden =
-                !missingPixelsExist;
 
             if (asyncCallback) {
                 await asyncCallback();
@@ -1409,24 +1397,6 @@ function runStep4(asyncCallback) {
         }, 1); // TODO: find better way to check that input is finished
     } catch (_e) {
         enableInteraction();
-    }
-}
-
-function addWaterMark(pdf, isHighQuality) {
-    for (let i = 0; i < pdf.internal.getNumberOfPages(); i++) {
-        pdf.setPage(i + 1);
-        pdf.setFontSize(isHighQuality ? 20 : 10);
-        pdf.setTextColor(200);
-        pdf.text(
-            pdf.internal.pageSize.height * 0.25,
-            pdf.internal.pageSize.height * 0.3,
-            "",
-        );
-        pdf.text(
-            pdf.internal.pageSize.height * 0.25,
-            pdf.internal.pageSize.height * 0.3 + 10,
-            "",
-        );
     }
 }
 
@@ -1489,6 +1459,9 @@ async function generateInstructions() {
             .filter(function (item, pos, self) {
                 return self.indexOf(item) === pos; // remove duplicates
             });
+        const includeSidesCheckbox = document.getElementById(
+            "include-sides-checkbox",
+        );
         generateInstructionTitlePage(
             resultImage,
             targetResolution[0],
@@ -1498,6 +1471,7 @@ async function generateInstructions() {
             step4CanvasUpscaled,
             titlePageCanvas,
             selectedPixelPartNumber,
+            includeSidesCheckbox.checked,
         );
         setDPI(titlePageCanvas, isHighQuality ? HIGH_DPI : LOW_DPI);
 
@@ -1511,7 +1485,6 @@ async function generateInstructions() {
         });
 
         const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
 
         const totalPlates =
             resultImage.length / (4 * PLATE_WIDTH * PLATE_WIDTH);
@@ -1536,8 +1509,7 @@ async function generateInstructions() {
         for (var i = 0; i < totalPlates; i++) {
             await sleep(50);
             if ((i + 1) % (isHighQuality ? 20 : 50) === 0) {
-                addWaterMark(pdf, isHighQuality);
-                pdf.save(`Lego-Art-Remix-Instructions-Part-${numParts}.pdf`);
+                pdf.save(`Brick-Master-Instructions-Part-${numParts}.pdf`);
                 numParts++;
                 pdf = new jsPDF({
                     orientation:
@@ -1605,11 +1577,10 @@ async function generateInstructions() {
             );
         }
 
-        addWaterMark(pdf, isHighQuality);
         pdf.save(
             numParts > 1
-                ? `Lego-Art-Remix-Instructions-Part-${numParts}.pdf`
-                : "Lego-Art-Remix-Instructions.pdf",
+                ? `Brick-Master-Instructions-Part-${numParts}.pdf`
+                : "Brick-Master-Instructions.pdf",
         );
         document.getElementById("pdf-progress-container").hidden = true;
         document.getElementById("download-instructions-button").hidden = false;
