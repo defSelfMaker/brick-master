@@ -50,9 +50,7 @@ function drawPixelsOnCanvas(pixels, canvas) {
     const context = canvas.getContext("2d");
 
     const imageData = context.createImageData(canvas.width, canvas.height);
-    Object.keys(pixels).forEach((pixel) => {
-        imageData.data[pixel] = pixels[pixel];
-    });
+    imageData.data.set(pixels);
     context.putImageData(imageData, 0, 0);
 }
 
